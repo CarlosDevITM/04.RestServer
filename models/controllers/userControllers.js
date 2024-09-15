@@ -5,7 +5,16 @@ const userGet = (req, res = response) => {
 };
 
 const userPost = (req, res = response) => {
-  res.send("Hello Post");
+  //Body que envia el cliente
+  // const body = req.body;
+  //Desestructurar lo que envia el cliente
+  const { nombre, apellido } = req.body;
+
+  res.json({
+    //msg: "Post API",
+    nombre,
+    apellido,
+  });
 };
 
 const userPut = (req, res = response) => {
