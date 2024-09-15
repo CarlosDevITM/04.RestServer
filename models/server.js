@@ -17,6 +17,9 @@ class Server {
   middlewares() {
     //CORS
     this.app.use(cors());
+
+    //Lectura y posteo del body
+    this.app.use(express.json());
     //Static pages folder
     this.app.use(express.static("public"));
   }
