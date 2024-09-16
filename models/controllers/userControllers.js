@@ -1,7 +1,14 @@
-const { response } = require("express");
+const { response, query } = require("express");
 
 const userGet = (req, res = response) => {
-  res.send("Hello Get");
+  //const queryParams = req.query;
+  const { name = "No name", age = 18 } = req.query;
+
+  res.json({
+    //queryParams,
+    name,
+    age,
+  });
 };
 
 const userPost = (req, res = response) => {
@@ -18,7 +25,11 @@ const userPost = (req, res = response) => {
 };
 
 const userPut = (req, res = response) => {
-  res.send("Hello Put");
+  const id = req.params.id;
+
+  res.json({
+    id: id,
+  });
 };
 
 const userPatch = (req, res = response) => {
