@@ -2,10 +2,14 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 
+//Mongoose
+const { dbConnection } = require("../database/connection.js");
+
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || 3000;
+    this.mongoDBConnection();
 
     //Middlewares
     this.middlewares();
@@ -22,6 +26,11 @@ class Server {
     this.app.use(express.json());
     //Static pages folder
     this.app.use(express.static("public"));
+  }
+
+  //MongoDB connection function
+  async mongoDBConnection() {
+    await dbConnection();
   }
 
   routes() {
