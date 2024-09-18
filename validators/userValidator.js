@@ -1,7 +1,7 @@
 const { check } = require("express-validator");
 const { findErrors } = require("../helpers/validateHelper");
-
 const Role = require("../models/rol");
+
 const nameValidations = check("name", "El nombre es un campo obligatorio")
   .not()
   .isEmpty()
