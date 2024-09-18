@@ -1,14 +1,20 @@
-const { response, query } = require("express");
+const { response } = require("express");
 //BCRYPT
 const bcrypt = require("bcrypt");
 
 //Users Model
 const Users = require("../models/user.js");
 
-const userGet = (req, res = response) => {
-  res.json({
-    type: "Get",
-  });
+const userGet = async (req, res = response) => {
+  const { limit = 5, from = 0 } = req.query;
+  try {
+    const getUsers = await Users.find().skip(Number(from)).limit(Number(limit));
+    res.json({
+      getUsers,
+    });
+  } catch (error) {
+    console.error(error.message);
+  }
 };
 
 const userPost = async (req, res = response) => {
@@ -36,12 +42,26 @@ const userPost = async (req, res = response) => {
   }
 };
 
-const userPut = (req, res = response) => {
-  const id = req.params.id;
+const userPut = async (req, res = response) => {
+  try {
+    const id = req.params.id;
+    //ALL WE WONT UPDATE          //ALL WE GONNA UPDATE
+    const { _id, password, google, email, ...user } = req.body;
 
-  res.json({
-    id: id,
-  });
+    //TODO: Validar
+    if (password) {
+      const salt = bcrypt.genSaltSync();
+      user.password = bcrypt.hashSync(password, salt);
+    }
+
+    const userDB = await Users.findByIdAndUpdate(id, user);
+
+    res.json({
+      userDB,
+    });
+  } catch (error) {
+    console.error(`Error al actualizar usuario debido a: ${error.message}`);
+  }
 };
 
 const userPatch = (req, res = response) => {
