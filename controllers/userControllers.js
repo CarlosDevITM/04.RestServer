@@ -8,9 +8,15 @@ const Users = require("../models/user.js");
 const userGet = async (req, res = response) => {
   const { limit = 5, from = 0 } = req.query;
   try {
-    const getUsers = await Users.find().skip(Number(from)).limit(Number(limit));
+    //Combined answer promises.
+    const [total, users] = await Promise.all([
+      Users.countDocuments({ status: true }),
+      Users.find({ status: true }).skip(Number(from)).limit(Number(limit)),
+    ]);
+
     res.json({
-      getUsers,
+      total,
+      users,
     });
   } catch (error) {
     console.error(error.message);
@@ -68,8 +74,18 @@ const userPatch = (req, res = response) => {
   res.send("Hello Patch");
 };
 
-const userDelete = (req, res = response) => {
-  res.send("Hello Delete");
+const userDelete = async (req, res = response) => {
+  const { id } = req.params;
+
+  //Fisic Delete
+  //const user = await Users.findByIdAndDelete(id);
+
+  //Delete by status
+  //This helps understand what a user done even if it's already deleted
+  const user = await Users.findByIdAndUpdate(id, { status: false });
+  res.json({
+    user,
+  });
 };
 
 module.exports = {

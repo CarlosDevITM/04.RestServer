@@ -17,6 +17,6 @@ router.put("/:id", validations, userPut);
 
 router.patch("/", userPatch);
 
-router.delete("/", userDelete);
+router.delete("/:id", userDelete);
 
 module.exports = router;
