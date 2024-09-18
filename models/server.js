@@ -9,6 +9,12 @@ class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || 3000;
+
+    //PATHS
+    this.usersPath = "/api/users";
+    this.authPath = "/api/auth";
+
+    //MONGO CONNECTION
     this.mongoDBConnection();
 
     //Middlewares
@@ -34,7 +40,9 @@ class Server {
   }
 
   routes() {
-    this.app.use("/api/users", require("../routes/userRoutes.js"));
+    this.app.use(this.authPath, require("../routes/authRoutes.js"));
+
+    this.app.use(this.usersPath, require("../routes/userRoutes.js"));
   }
 
   listener() {
