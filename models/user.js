@@ -1,3 +1,4 @@
+//Schema para controlar acciones de mongo como borrar etc.
 const { Schema, model } = require("mongoose");
 
 const userSchema = Schema({
@@ -39,7 +40,8 @@ const userSchema = Schema({
 });
 
 userSchema.methods.toJSON = function () {
-  const { __v, password, ...user } = this.toObject();
+  const { __v, password, _id, ...user } = this.toObject();
+  user.udi = _id;
   return user;
 };
 
