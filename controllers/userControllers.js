@@ -77,14 +77,18 @@ const userPatch = (req, res = response) => {
 const userDelete = async (req, res = response) => {
   const { id } = req.params;
 
+  const uid = req.uid;
+
   //Fisic Delete
   //const user = await Users.findByIdAndDelete(id);
 
   //Delete by status
   //This helps understand what a user done even if it's already deleted
   const user = await Users.findByIdAndUpdate(id, { status: false });
+
   res.json({
     user,
+    uid,
   });
 };
 
