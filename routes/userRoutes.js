@@ -9,7 +9,8 @@ const {
 
 const { validations } = require("../validators/userValidator");
 const { validateJWT } = require("../helpers/validateJWT");
-const { isAdminValidation } = require("../helpers/isAdminValidation");
+const { hasRole } = require("../helpers/hasRoleValidation");
+
 const router = Router();
 
 router.get("/", userGet);
@@ -20,6 +21,11 @@ router.put("/:id", validations, userPut);
 
 router.patch("/", userPatch);
 
-router.delete("/:id", validateJWT, isAdminValidation, userDelete);
+router.delete(
+  "/:id",
+  validateJWT,
+  hasRole("admin", "user", "ventas"),
+  userDelete
+);
 
 module.exports = router;

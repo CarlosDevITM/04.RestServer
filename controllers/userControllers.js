@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 
 //Users Model
 const Users = require("../models/user.js");
+const Roles = require("../models/rol");
 
 const userGet = async (req, res = response) => {
   const { limit = 5, from = 0 } = req.query;
