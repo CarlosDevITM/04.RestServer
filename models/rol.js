@@ -7,4 +7,10 @@ const roleSchema = Schema({
   },
 });
 
+// roleSchema.methods.toJSON = function () {
+//   const { ...roles } = this.toObject();
+//   console.log(roles);
+//   return roles;
+// };
+
 module.exports = model("Role", roleSchema);

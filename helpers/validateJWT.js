@@ -26,7 +26,6 @@ const validateJWT = async (req = request, res = response, next) => {
 
     //Adding our user to the object.
     req.user = user;
-    console.log(user);
 
     //Verify if user exists or is an administrator
     const { status } = user;
