@@ -3,9 +3,70 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MiddleWare</title>
+    <title>Google</title>
   </head>
   <body>
-    <h1>MiddleWare Working!</h1>
+    <h1>Google Sign In</h1>
+    <hr />
+
+    <div
+      id="g_id_onload"
+      data-client_id="651780162245-gslcvt86svira0mdbj9a15tjha0u732g.apps.googleusercontent.com"
+      data-auto_prompt="false"
+      data-callback="handleCredentialResponse"
+    ></div>
+    <div
+      class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left"
+    ></div>
+
+    <button id="btnSignOut" onclick="signOut()">SignOut</button>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <script>
+      function handleCredentialResponse(response) {
+        // Google token
+        const body = { id_token: response.credential };
+        fetch("http://localhost:8000/api/auth/google", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body),
+        })
+          .then((resp) => resp.json())
+          .then((resp) => {
+            console.log(resp.user.email);
+            // Verifica si el objeto user y email están en la respuesta
+            if (resp.user && resp.user.email) {
+              localStorage.setItem("email", resp.user.email);
+            } else {
+              console.warn("No se pudo obtener el email del usuario");
+            }
+          })
+          .catch(console.warn);
+      }
+
+      const button = document.getElementById("btnSignOut");
+
+      function signOut() {
+        alert("You´ve clicked me");
+        google.accounts.id.disableAutoSelect();
+
+        const email = localStorage.getItem("email");
+        if (email) {
+          google.accounts.id.revoke(email, (done) => {
+            localStorage.clear();
+            location.reload();
+          });
+        } else {
+          console.warn("No se encontró el email en el localStorage");
+        }
+      }
+    </script>
   </body>
 </html>
