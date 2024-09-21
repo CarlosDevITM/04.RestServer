@@ -9,5 +9,11 @@ router.post("/login", loginValidations, authController.login);
 
 router.post("/google", googleValidators, authController.googleSignIn);
 
+router.get("/googleConf", (req, res) => {
+  return res.json({
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+  });
+});
+
 module.exports = router;
 //googleValidators
