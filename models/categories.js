@@ -6,6 +6,17 @@ const categorieSchema = Schema({
     type: String,
     required: [true, "Name is required"],
   },
+
+  status: {
+    type: Boolean,
+    default: true,
+    required: true,
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    default: true,
+    required: true,
+  },
 });
 
 categorieSchema.methods.toJSON = function () {

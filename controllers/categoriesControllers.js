@@ -45,33 +45,60 @@ categoriesController.getOneCategory = async (req, res) => {
 };
 
 categoriesController.postCategory = async (req, res) => {
-  const body = req.body;
-  categories = new Categories(body);
-
   try {
-    const response = await categories.save();
-    if (!response) {
-      return res.status(401).json({
-        msg: "It couldn´t post a category from postCategory",
+    const name = req.body.name.toUpperCase();
+
+    const categoryDBexists = await Categories.findOne({ name });
+
+    if (categoryDBexists) {
+      return res.status(400).json({
+        msg: `The category ${name} already exists`,
       });
     }
-    res.status(200).json({
-      response,
-    });
+
+    //Data to save
+    const data = {
+      name,
+      user: req.user._id,
+    };
+
+    const category = new Categories(data);
+    await category.save();
+
+    res.status(201).json(category);
   } catch (error) {
-    console.log(`${error.message} from postCategory`);
-    res.status(500).json({
+    res.json({
       error: error.message,
     });
   }
+  // const body = req.body;
+  // categories = new Categories(body);
+
+  // try {
+  //   const response = await categories.save();
+  //   if (!response) {
+  //     return res.status(401).json({
+  //       msg: "It couldn´t post a category from postCategory",
+  //     });
+  //   }
+  //   res.status(200).json({
+  //     response,
+  //   });
+  // } catch (error) {
+  //   console.log(`${error.message} from postCategory`);
+  //   res.status(500).json({
+  //     error: error.message,
+  //   });
+  // }
 };
 
 categoriesController.putCategory = async (req, res) => {
   const id = req.params.id;
-  const { __v, _id, ...categories } = req.body;
+  // const { __v, _id, status, ...name } = req.body;
+  const name = req.body.name.toUpperCase();
 
   try {
-    const response = await Categories.findByIdAndUpdate(id, categories);
+    const response = await Categories.findByIdAndUpdate(id, name);
     if (!response) {
       return res.status(401).json({
         msg: "It couldn´t update a category from putCategory",
@@ -93,7 +120,7 @@ categoriesController.deleteCategory = async (req, res) => {
   const id = req.params.id;
 
   try {
-    const response = await Categories.findByIdAndDelete({ _id: id });
+    const response = await Categories.findByIdAndUpdate(id, { status: false });
     if (!response) {
       return res.status(401).json({
         msg: "It couldn´t delete a category from deleteCategory",
