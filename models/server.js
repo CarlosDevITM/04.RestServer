@@ -11,8 +11,11 @@ class Server {
     this.port = process.env.PORT || 3000;
 
     //PATHS
-    this.usersPath = "/api/users";
-    this.authPath = "/api/auth";
+    this.paths = {
+      users: "/api/users",
+      auth: "/api/auth",
+      categories: "/api/categories",
+    };
 
     //MONGO CONNECTION
     this.mongoDBConnection();
@@ -40,9 +43,14 @@ class Server {
   }
 
   routes() {
-    this.app.use(this.authPath, require("../routes/authRoutes.js"));
+    this.app.use(this.paths.auth, require("../routes/authRoutes.js"));
 
-    this.app.use(this.usersPath, require("../routes/userRoutes.js"));
+    this.app.use(this.paths.users, require("../routes/userRoutes.js"));
+
+    this.app.use(
+      this.paths.categories,
+      require("../routes/categoriesRoutes.js")
+    );
   }
 
   listener() {
