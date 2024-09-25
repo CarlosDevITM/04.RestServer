@@ -48,6 +48,7 @@ categoriesController.postCategory = async (req, res) => {
   try {
     const name = req.body.name.toUpperCase();
 
+    //Validate that a category cannot be twice
     const categoryDBexists = await Categories.findOne({ name });
 
     if (categoryDBexists) {
@@ -71,31 +72,12 @@ categoriesController.postCategory = async (req, res) => {
       error: error.message,
     });
   }
-  // const body = req.body;
-  // categories = new Categories(body);
-
-  // try {
-  //   const response = await categories.save();
-  //   if (!response) {
-  //     return res.status(401).json({
-  //       msg: "It couldn´t post a category from postCategory",
-  //     });
-  //   }
-  //   res.status(200).json({
-  //     response,
-  //   });
-  // } catch (error) {
-  //   console.log(`${error.message} from postCategory`);
-  //   res.status(500).json({
-  //     error: error.message,
-  //   });
-  // }
 };
 
 categoriesController.putCategory = async (req, res) => {
   const id = req.params.id;
   // const { __v, _id, status, ...name } = req.body;
-  const name = req.body.name.toUpperCase();
+  const name = req.body;
 
   try {
     const response = await Categories.findByIdAndUpdate(id, name);

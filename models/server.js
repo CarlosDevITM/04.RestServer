@@ -15,6 +15,7 @@ class Server {
       users: "/api/users",
       auth: "/api/auth",
       categories: "/api/categories",
+      products: "/api/products",
     };
 
     //MONGO CONNECTION
@@ -51,6 +52,7 @@ class Server {
       this.paths.categories,
       require("../routes/categoriesRoutes.js")
     );
+    this.app.use(this.paths.products, require("../routes/productsRoutes.js"));
   }
 
   listener() {
