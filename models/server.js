@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
+const fileUpload = require("express-fileupload");
 
 //Mongoose
 const { dbConnection } = require("../database/connection.js");
@@ -16,6 +17,8 @@ class Server {
       auth: "/api/auth",
       categories: "/api/categories",
       products: "/api/products",
+      search: "/api/search",
+      upload: "/api/upload",
     };
 
     //MONGO CONNECTION
@@ -36,6 +39,13 @@ class Server {
     this.app.use(express.json());
     //Static pages folder
     this.app.use(express.static("public"));
+    //File uploads
+    this.app.use(
+      fileUpload({
+        useTempFiles: true,
+        tempFileDir: "/tmp/",
+      })
+    );
   }
 
   //MongoDB connection function
@@ -53,6 +63,10 @@ class Server {
       require("../routes/categoriesRoutes.js")
     );
     this.app.use(this.paths.products, require("../routes/productsRoutes.js"));
+
+    this.app.use(this.paths.search, require("../routes/searchRoutes.js"));
+
+    this.app.use(this.paths.upload, require("../routes/uploadsRoutes.js"));
   }
 
   listener() {
