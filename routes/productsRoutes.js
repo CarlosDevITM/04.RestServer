@@ -8,7 +8,7 @@ const router = Router();
 router.get("/", productsControllers.getProducts);
 
 //GetOneCategory
-router.get("/:id");
+router.get("/:id", productsControllers.getOneProduct);
 
 router.post(
   "/",

@@ -2,8 +2,12 @@ const { Products } = require("../models");
 const productsController = {};
 
 productsController.getProducts = async (req, res) => {
+  //Pagination
+  const { from, limit } = req.query;
   try {
-    const response = await Products.find();
+    const response = await Categories.find()
+      .skip(Number(from))
+      .limit(Number(limit));
     //If there´s no response
     if (!response) {
       return res.status(400).json({
@@ -18,8 +22,31 @@ productsController.getProducts = async (req, res) => {
 };
 
 productsController.getOneProduct = async (req, res) => {
+  const id = req.params.id;
   try {
-  } catch (error) {}
+    const response = await Products.findOne({ _id: id });
+    //If there´s no response
+    if (!response) {
+      return res.status(400).json({
+        msg: "Error trying to get products",
+      });
+    }
+
+    if (response.status !== true) {
+      return res.status(403).json({
+        error: "The user you are trying to show is not available or is deleted",
+      });
+    }
+
+    res.json({
+      response,
+    });
+  } catch (error) {
+    res.json({
+      error: error.message,
+    });
+    console.log(error);
+  }
 };
 
 productsController.postProducts = async (req, res) => {
