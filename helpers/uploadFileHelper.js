@@ -26,6 +26,7 @@ const uploadFileHelper = (files, allowedExtensions = [], filesFolder = "") => {
       __dirname,
       "../uploads/",
       filesFolder,
+      "/",
       temporalName
     );
 
