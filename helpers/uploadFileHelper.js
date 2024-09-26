@@ -29,11 +29,12 @@ const uploadFileHelper = (files, allowedExtensions = [], filesFolder = "") => {
       "/",
       temporalName
     );
+    console.log(uploadPath);
 
     myFile.mv(uploadPath, (error) => {
       if (error) return resolve(error);
 
-      resolve("File" + temporalName);
+      resolve(temporalName);
     });
 
     // // Use the mv() method to place the file somewhere on your server
