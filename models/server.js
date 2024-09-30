@@ -2,14 +2,19 @@ const express = require("express");
 require("dotenv").config();
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
+const { createServer } = require("http");
 
 //Mongoose
 const { dbConnection } = require("../database/connection.js");
+const { socketController } = require("../sockets/socketController.js");
 
 class Server {
   constructor() {
     this.app = express();
     this.port = process.env.PORT || 3000;
+    this.server = createServer(this.app);
+
+    this.io = require("socket.io")(this.server);
 
     //PATHS
     this.paths = {
@@ -29,6 +34,9 @@ class Server {
 
     //Rutas
     this.routes();
+
+    //Sockets
+    this.sockets();
   }
 
   middlewares() {
@@ -71,8 +79,11 @@ class Server {
     this.app.use(this.paths.upload, require("../routes/uploadsRoutes.js"));
   }
 
+  sockets() {
+    this.io.on("connection", socketController);
+  }
   listener() {
-    this.app.listen(this.port, () =>
+    this.server.listen(this.port, () =>
       console.log(`Express server listening on ${this.port}`)
     );
   }
