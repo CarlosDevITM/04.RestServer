@@ -86,6 +86,7 @@ const getImage = async (req, res = response) => {
   //Clear previous files
   if (model.image) {
     console.log(model.image);
+
     const imagePath = path.join(
       __dirname,
       "../uploads",
@@ -97,6 +98,7 @@ const getImage = async (req, res = response) => {
       return res.sendFile(imagePath);
     }
   }
+
   const defaultImagePath = path.join(__dirname, "../img", "notFound.jpg");
   res.sendFile(defaultImagePath);
 };
@@ -143,13 +145,6 @@ const updateImageCloudinary = async (req, res = response) => {
   res.json({
     model,
   });
-
-  // const name = await uploadFileHelper(req.files, ["jpg", "png"], collection);
-
-  // model.image = name;
-  // await model.save();
-
-  // res.json(model);
 };
 
 module.exports = { uploadFile, updateImageCloudinary, getImage, updateImage };
