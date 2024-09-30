@@ -92,4 +92,16 @@ authController.googleSignIn = async (req, res = response) => {
   }
 };
 
+authController.renewToken = async (req, res = response) => {
+  const { user } = req;
+
+  const token = await generateJWT(user.id);
+
+  console.log(user);
+  res.json({
+    user,
+    token,
+  });
+};
+
 module.exports = authController;

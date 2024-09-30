@@ -14,6 +14,9 @@ const validateJWT = (req, res, next) => {
 
   //USER UPDATE REQUEST
   validateUserHttpActions(req, res, "PUT", next);
+
+  //USER GET REQUEST
+  validateUserHttpActions(req, res, "GET", next);
 };
 
 const validateUserHttpActions = async (req, res, method, next) => {
