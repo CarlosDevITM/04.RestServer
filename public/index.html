@@ -1,96 +1,63 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Google Sign In</title>
   </head>
   <body>
-    <h1>Google Sign In</h1>
-    <hr />
+    <div class="row-mt-5">
+      <div class="col-sm-6">
+        <h1>Google Sign In</h1>
+        <hr />
 
-    <!-- Placeholder para el botón de Google Sign-In -->
-    <div id="g_id_onload"></div>
-    <div
-      class="g_id_signin"
-      data-type="standard"
-      data-size="large"
-      data-theme="outline"
-      data-text="sign_in_with"
-      data-shape="rectangular"
-      data-logo_alignment="left"
-    ></div>
+        <!-- Placeholder para el botón de Google Sign-In -->
+        <div id="g_id_onload"></div>
+        <div
+          class="g_id_signin"
+          data-type="standard"
+          data-size="large"
+          data-theme="outline"
+          data-text="sign_in_with"
+          data-shape="rectangular"
+          data-logo_alignment="left"
+        ></div>
 
-    <button id="btnSignOut" onclick="singOut()">SignOut</button>
+        <button class="btn btn-warning" id="btnSignOut" onclick="singOut()">
+          SignOut
+        </button>
+      </div>
+
+      <br />
+
+      <div class="col-sm-6">
+        <h1>Login Manual</h1>
+        <hr />
+        <form action="" class="d-grid">
+          <input
+            type="text"
+            name="email"
+            class="form-control mb-2"
+            placeholder="Email"
+          />
+          <input
+            type="text"
+            name="password"
+            class="form-control mb-2"
+            placeholder="Password"
+          />
+          <button type="submit" class="btn btn-primary">Log In</button>
+        </form>
+      </div>
+    </div>
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-    <script>
-      // Función asíncrona para obtener el client_id desde la API
-      const googleId = async () => {
-        try {
-          const resp = await fetch(
-            "http://localhost:8000/api/auth/googleConf",
-            {
-              headers: { "Content-Type": "application/json" },
-            }
-          );
-          const data = await resp.json();
-          return data.googleClientId;
-        } catch (error) {
-          console.error("Error fetching Google Client ID:", error);
-        }
-      };
-
-      // Función para inicializar Google Sign-In dinámicamente
-      const initializeGoogleSignIn = async () => {
-        const clientId = await googleId(); // Esperamos a que la promesa se resuelva
-
-        // Asignamos dinámicamente el client_id al div
-        const gIdOnloadDiv = document.getElementById("g_id_onload");
-        gIdOnloadDiv.setAttribute("data-client_id", clientId);
-
-        // Inicializamos Google Sign-In
-        google.accounts.id.initialize({
-          client_id: clientId,
-          callback: handleCredentialResponse,
-        });
-
-        // Renderizamos el botón de Google Sign-In
-        google.accounts.id.renderButton(
-          document.querySelector(".g_id_signin"),
-          {
-            theme: "outline",
-            size: "large",
-          }
-        );
-      };
-
-      // Ejecutamos la función de inicialización al cargar la página
-      initializeGoogleSignIn();
-
-      function handleCredentialResponse(response) {
-        const body = { id_token: response.credential };
-        fetch("http://localhost:8000/api/auth/google", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body),
-        })
-          .then((resp) => resp.json())
-          .then((resp) => {
-            console.log(resp);
-            localStorage.setItem("email", resp.user.email);
-          })
-          .catch(console.warn);
-      }
-
-      const singOut = () => {
-        google.accounts.id.disableAutoSelect();
-        google.accounts.id.revoke(localStorage.getItem("email"), (done) => {
-          localStorage.clear();
-          location.reload();
-        });
-      };
-    </script>
+    <script src="./js/index.js"></script>
   </body>
 </html>
