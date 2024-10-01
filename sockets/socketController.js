@@ -17,8 +17,13 @@ const socketController = async (socket = new Socket(), io) => {
   //Add connected user
   chatMessages.connectUser(user);
   io.emit("active-users", chatMessages.usersArray());
+  socket.emit("get-messages", chatMessages.lastTenMessages());
 
   console.log("Se conectó", user.name);
+
+  //Connect an user to a specific channel
+  console.log(user.id);
+  socket.join(user.id);
 
   //Clear when a user disconnects
   socket.on("disconnect", () => {
@@ -28,9 +33,15 @@ const socketController = async (socket = new Socket(), io) => {
 
   //Send a message
   socket.on("send-message", ({ uid, message }) => {
-    chatMessages.sendMessage(user.id, user.name, message);
+    console.log({ elIDEs: uid });
+    if (uid) {
+      //Private message
+      socket.to(uid).emit("private-messages", { from: user.id, message });
+    } else {
+      chatMessages.sendMessage(user.id, user.name, message);
 
-    io.emit("get-messages", chatMessages.lastTenMessages());
+      io.emit("get-messages", chatMessages.lastTenMessages());
+    }
   });
 };
 

@@ -44,29 +44,47 @@ const socketConnection = async () => {
 
   socket.on("disconnect", () => console.log("Server Disconnected"));
 
-  socket.on("get-messages", (payload) => {
-    console.log(payload);
-  });
+  socket.on("get-messages", drawMessages);
 
   socket.on("active-users", drawUsers);
 
-  socket.on("private-messages", () => {});
+  socket.on("private-messages", ({ de, message }) => {
+    console.log(`Private message ${(de, message)}`);
+  });
 };
 
 const drawUsers = (users = []) => {
+  console.log(users);
   let usersHtml = "";
-  users.forEach(({ name, uid }) => {
+  users.forEach(({ name, udi }) => {
     usersHtml += `
       <li>
         <p>
           <h5 class="text-success">${name}</h5>
-          <span class="fs-5 text-muted">${uid}</span>
+          <span class="fs-5 text-muted">${udi}</span>
         </p>
       </li>
     `;
   });
 
   usersList.innerHTML = usersHtml;
+};
+
+const drawMessages = (messages = []) => {
+  console.log(messages);
+  let messagesHtml = "";
+  messages.forEach(({ username, message }) => {
+    messagesHtml += `
+      <li>
+        <p>
+          <h5 class="text-primary">${username}</h5>
+          <span class="fs-5 text-muted">${message}</span>
+        </p>
+      </li>
+    `;
+  });
+
+  messagesList.innerHTML = messagesHtml;
 };
 
 txtMessage.addEventListener("keyup", ({ keyCode }) => {
