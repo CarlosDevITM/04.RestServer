@@ -1,11 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat</title>
   </head>
   <body class="container">
+    <div class="col-sm-6">
+      <h1>Send message</h1>
+      <hr />
+      <input
+        type="text"
+        id="txtUid"
+        class="form-control mb-2"
+        placeholder="uid"
+        autocomplete="off"
+      />
+
+      <input
+        type="text"
+        id="txtMessage"
+        class="form-control mb-2"
+        placeholder="Message"
+        autocomplete="off"
+      />
+
+      <h3>Users</h3>
+      <hr />
+      <ul id="usersList"></ul>
+    </div>
+
+    <div class="col-sm-6">
+      <h3>Chat complete</h3>
+      <hr />
+      <ul id="messagesList"></ul>
+    </div>
+
+    <button class="btn btn-outline-danger" id="btnLogOut">LogOut</button>
     <script src="./socket.io/socket.io.js"></script>
     <script src="./js/chat.js"></script>
   </body>

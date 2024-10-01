@@ -3,6 +3,13 @@ console.log("Chat INDEX");
 let user = null;
 let socket = null;
 
+//Chat html
+const txtUid = document.querySelector("#txtUid");
+const txtMessage = document.querySelector("#txtMessage");
+const usersList = document.querySelector("#usersList");
+const messagesList = document.querySelector("#messagesList");
+const btnLogOut = document.querySelector("#btnLogOut");
+
 const validateJWT = async () => {
   const token = localStorage.getItem("manualToken") || "";
 
@@ -29,9 +36,19 @@ const validateJWT = async () => {
 
 const socketConnection = async () => {
   //Starting connection with server
-  const socket = io({
+  socket = io({
     extraHeaders: { token: localStorage.getItem("manualToken") },
   });
+
+  socket.on("connect", () => console.log("Server Connected"));
+
+  socket.on("disconnect", () => console.log("Server Disconnected"));
+
+  socket.on("get-messages", () => {});
+
+  socket.on("active-users", () => {});
+
+  socket.on("private-messages", () => {});
 };
 
 const main = async () => {
