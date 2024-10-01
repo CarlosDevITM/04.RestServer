@@ -90,6 +90,8 @@ myForm.addEventListener("submit", (e) => {
       }
 
       localStorage.setItem("manualToken", token);
+      //Redirect to the chat
+      window.location = "chat.html";
     })
     .catch((err) => console.log(err));
 });

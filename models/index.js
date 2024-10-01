@@ -4,8 +4,8 @@ const Categories = require("./categories");
 const Products = require("./products");
 
 module.exports = {
-  Role,
-  User,
-  Categories,
-  Products,
+  ...Role,
+  ...User,
+  ...Categories,
+  ...Products,
 };
