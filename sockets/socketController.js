@@ -20,9 +20,17 @@ const socketController = async (socket = new Socket(), io) => {
 
   console.log("Se conectó", user.name);
 
+  //Clear when a user disconnects
   socket.on("disconnect", () => {
     chatMessages.disconnectUser(user.id);
     io.emit("active-users", chatMessages.usersArray());
+  });
+
+  //Send a message
+  socket.on("send-message", ({ uid, message }) => {
+    chatMessages.sendMessage(user.id, user.name, message);
+
+    io.emit("get-messages", chatMessages.lastTenMessages());
   });
 };
 

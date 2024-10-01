@@ -44,7 +44,9 @@ const socketConnection = async () => {
 
   socket.on("disconnect", () => console.log("Server Disconnected"));
 
-  socket.on("get-messages", () => {});
+  socket.on("get-messages", (payload) => {
+    console.log(payload);
+  });
 
   socket.on("active-users", drawUsers);
 
@@ -67,6 +69,15 @@ const drawUsers = (users = []) => {
   usersList.innerHTML = usersHtml;
 };
 
+txtMessage.addEventListener("keyup", ({ keyCode }) => {
+  const message = txtMessage.value;
+  const uid = txtUid.value;
+  if (keyCode !== 13) return;
+
+  if (message.length === 0) return;
+
+  socket.emit("send-message", { message, uid });
+});
 const main = async () => {
   const result = validateJWT();
 };
